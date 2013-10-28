@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+
+    function showDeviceInfo() {
+        var deviceName = document.getElementById('deviceName');
+        deviceName.innerHTML = 'Device name: ' + scmobile.device.name;
+
+        var deviceVersion = document.getElementById('deviceVersion');
+        deviceVersion.innerHTML = 'Device version: ' + scmobile.device.version;
+
+        var deviceUUID = document.getElementById('deviceUUID');
+        deviceUUID.innerHTML = 'Device UUID: ' + scmobile.device.uuid;
+    }
+</script>
+<h1>Device info plugin example</h1>
+<hr>
+<input onclick="showDeviceInfo()"
+       id="deviceInfo"
+       type="button"
+       value="Show device info">
+<br/>
+<p id="deviceName"></p>
+<p id="deviceVersion"></p>
+<p id="deviceUUID"></p>
+
+</body>
+</html>

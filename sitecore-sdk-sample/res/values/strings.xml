@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sitecore SDK sample</string>
+    <string name="text_get_item">Get Items</string>
+    <string name="text_params_header">Query parameters</string>
+    <string name="text_item_path">item path</string>
+    <string name="text_item_id">item id</string>
+    <string name="text_item_version">Item version</string>
+    <string name="text_item_database">database</string>
+    <string name="text_item_language">language</string>
+    <string name="text_self_checkbox">Self</string>
+    <string name="text_parent_checkbox">Parent</string>
+    <string name="text_children_checkbox">Children</string>
+    <string name="text_sitecore_query">sitecore query</string>
+    <string name="text_page">page</string>
+    <string name="text_item_name">Item name:</string>
+    <string name="text_parent_item_id">Parent item ID:</string>
+    <string name="text_create_item_button">Create item</string>
+    <string name="text_has_children">HasChildren:</string>
+    <string name="text_long_id">LongID:</string>
+    <string name="text_item_template">Template:</string>
+    <string name="text_item_fields">Fields :</string>
+    <string name="text_field_name">Field Name</string>
+    <string name="text_field_type">Type:</string>
+    <string name="text_field_id">Field id:</string>
+    <string name="text_settings">Settings</string>
+    <string name="text_template_hint">item template</string>
+    <string name="text_item_name_hint">item name</string>
+    <string name="text_page_size">page size</string>
+    <string name="text_field_raw_value">Raw Value</string>
+</resources>

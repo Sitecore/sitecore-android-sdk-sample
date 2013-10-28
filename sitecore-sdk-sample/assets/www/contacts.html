@@ -1,0 +1,141 @@
+<html>
+<body>
+<script>
+
+var onSuccess = function (result) {
+    // alert('Contact created: ' + result);
+}
+
+var onError = function (error) {
+    alert(error.localizedDescription);
+}
+
+var displayFirstLastName = function (contacts) {
+    for (var i = 0; i < contacts.length; i++) {
+        scmobile.notification.alert("Contact found", contacts[i].firstName + " " + contacts[i].lastName, function () {
+        }, 'Ok');
+    }
+}
+
+var displayFirstPhone = function (contacts) {
+    for (var i = 0; i < contacts.length; i++) {
+        scmobile.notification.alert("Contact found", contacts[i].phones[0], function () {
+        }, 'Ok');
+    }
+}
+
+var displayPhonesCount = function (contacts) {
+    for (var i = 0; i < contacts.length; i++) {
+        scmobile.notification.alert("Contact found", "Phones count: " + contacts[i].phones.length, function () {
+        }, 'Ok');
+    }
+}
+
+var displaySomeFields = function (contacts) {
+    for (var i = 0; i < contacts.length; i++) {
+        scmobile.notification.alert("Contact found",
+                "FirstName: " + contacts[i].firstName
+                        + " Company: " + contacts[i].company
+                        + " Birthday: " + contacts[i].birthday, function () {
+                }, 'Ok');
+    }
+}
+
+function createContact(firstName, lastName, company, emails, phones, addresses, websites, birthday) {
+    var contact = scmobile.contacts.create();
+    if (firstName != null)
+        contact.firstName = firstName;
+    if (lastName != null)
+        contact.lastName = lastName;
+    if (company != null)
+        contact.company = company;
+    contact.emails = emails;
+    contact.phones = phones;
+    contact.addresses = addresses;
+    contact.websites = websites;
+    if (birthday != null)
+        contact.birthday = birthday;
+
+    contact.silentSave(onSuccess, onError);
+}
+
+function findContact(predicate, onSuccessResult) {
+    scmobile.contacts.silentSelect(predicate, onSuccessResult, onError);
+}
+
+function createContactWithAllAvailableFields() {
+    var address = {
+        street: "12, Street name",
+        city: "City",
+        state: "ST",
+        zip: "123456",
+        country: "France"
+    }
+    var birthday = '6/09/07';
+    var firstName = 'AllFields';
+    createContact(firstName,
+            'SilentSave',
+            'Company',
+            ['email1@gmail.com', 'email2@gmail.com', 'email3@gmail.com'],
+            ['123456', '+38063 1234567'],
+            [address],
+            ['website1.com', 'website2.com'],
+            birthday);
+    var predicate = function (contact) {
+        return (contact.firstName == firstName && contact.birthday == birthday);
+    }
+    findContact(predicate, displayFirstLastName);
+}
+
+function selectAll() {
+    return true; //return all
+}
+
+function remove(contacts) {
+    var ids = [];
+    for (var i = 0; i < contacts.length; i++) {
+        ids.push(contacts[i].id);
+    }
+
+    scmobile.contacts.removeMultiple(ids, onSuccess, onError);
+}
+
+function deleteAllContacts() {
+    scmobile.contacts.silentSelect(selectAll, remove, onError);
+}
+
+function showEditForm() {
+    var contact = scmobile.contacts.create({
+        firstName: "Username",
+        lastName: "LastName"
+    });
+
+    contact.company = 'Sitecore';
+    contact.emails = ['email1@gmail.com', 'email2@gmail.com'];
+    contact.phones = ['128-456', '+38063 1230567'];
+    var addr = {
+        street: "Street 123 456",
+        city: "Dnipro",
+        state: "DP",
+        zip: "12345",
+        country: "Ukraine"
+    }
+    contact.addresses = [addr];
+
+    contact.save(onSuccess, onError);
+}
+
+</script>
+<h1>Contacts plugin example</h1>
+<hr>
+<input onclick="createContactWithAllAvailableFields()"
+       type="button"
+       id="createContactWithAllAvailableFields"
+       value="Create Contact With All Available Fields">
+<br/>
+<input onclick="showEditForm()"
+       type="button"
+       value="Show New Contact Form">
+<br/>
+</body>
+</html>

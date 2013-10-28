@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+    var accelerometer;
+
+    function start() {
+        var xMotion = document.getElementById('xMotion');
+        var yMotion = document.getElementById('yMotion');
+        var zMotion = document.getElementById('zMotion');
+        var timestamp = document.getElementById('timestamp');
+        accelerometer = new scmobile.motion_manager.Accelerometer();
+        var onAcceleration = function(data) {
+            //console.log("success: " + data.toString());
+            //console.log("success x: " + data.x);
+            xMotion.innerHTML = 'X: ' + data.x;
+            yMotion.innerHTML = 'Y: ' + data.y;
+            zMotion.innerHTML = 'Z: ' + data.z;
+            timestamp.innerHTML = 'Timestamp: ' + data.timestamp;
+        }
+
+        var onError = function(data) {
+            console.log("error: " + data.localizedDescription);
+        }
+
+        accelerometer.start(onAcceleration, onError);
+    }
+
+    function stop() {
+        accelerometer.stop();
+    }
+
+</script>
+
+<h1>Accelerometer plugin example</h1>
+<hr>
+<input onclick="start()"
+       id="startAccelerometer"
+       type="button"
+       value="Start accelerometer">
+<br/>
+<input onclick="stop()"
+       id="stopAccelerometer"
+       type="button"
+       value="stop accelerometer">
+<br/>
+
+<p id="xMotion"></p>
+<p id="yMotion"></p>
+<p id="zMotion"></p>
+<p id="timestamp"></p>
+</body>
+</html>

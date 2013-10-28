@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="key_is_auth">is_authenticated</string>
+    <string name="key_url">url</string>
+    <string name="key_login">login</string>
+    <string name="key_password">password</string>
+
+</resources>

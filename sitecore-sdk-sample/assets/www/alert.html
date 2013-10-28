@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Alert plugin examples</h1>
+<script type="text/javascript" charset="utf-8">
+
+    var alertCallback = function (buttonIndex) {
+        alert('pressed: ' + buttonIndex);
+    }
+</script>
+<input onclick="scmobile.notification.alert('Normal alert', 'message content', alertCallback, 'button cancel, button ok, button 3, button 4')"
+       id="normalAlert"
+       type="button"
+       value="Normal Alert">
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Send email example</h1>
+<script type="text/javascript" charset="utf-8">
+    var onSuccess = function (result) {
+        alert('result: ' + result);
+    }
+
+    function sendEmailWithSubjectAndBody() {
+        var email = new scmobile.share.Email();
+
+        email.toRecipients = ['testmobilesdk@yahoo.com'];
+        email.ccRecipients = ['alr@sitecore.net'];
+        email.bccRecipients = 'testmobilesdk@yahoo.com';
+        email.subject = 'Send Email With Subject And Body';
+        email.messageBody = 'Test Body in JS';
+        email.isHTML = false;
+        email.send(onSuccess);
+    }
+
+    function sendEmailWithHtml() {
+        var email = new scmobile.share.Email();
+
+        email.toRecipients = ['testmobilesdk@yahoo.com'];
+        email.ccRecipients = ['alr@sitecore.net'];
+        email.bccRecipients = 'testmobilesdk@yahoo.com';
+        email.subject = 'Send Email With Html in Body';
+        email.messageBody = '<b>Test</b> Body in JS';
+        email.isHTML = true;
+        email.send(onSuccess);
+    }
+</script>
+<input id="emailWithSubjectAndBody" onclick="sendEmailWithSubjectAndBody()" type="button" value="Send Email With Subject And Body"/> <br/>
+<input id="emailWithHtmlinBody" onclick="sendEmailWithHtml()" type="button" value="Send Email With Html in Body"/> <br/>
+</body>
+</html>

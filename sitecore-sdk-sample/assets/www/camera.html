@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+    var onSuccess = function(imageURI) {
+        scmobile.console.log('getPicture OK: ' + imageURI);
+        var image = document.getElementById('largeImage');
+        var data = document.getElementById('data');
+        image.src = imageURI;
+        data.innerText = imageURI;
+    };
+
+    var onError = function(error) {
+        scmobile.notification.alert('Error', 'message: ' + error.localizedDescription, function(buttonIndex){}, 'OK');
+    };
+
+    function getImage(source) {
+        var options = {};
+        options.sourceType = source;
+
+        scmobile.camera.getPicture(onSuccess, onError, options);
+    }
+
+</script>
+
+<h2>Image plugin example</h2>
+<hr>
+<input onclick="getImage(scmobile.camera.PictureSourceType.CAMERA)"
+       type="button"
+       id="imageFromCamera"
+       value="Get Camera Image"/>
+<br/>
+
+<input onclick="getImage(scmobile.camera.PictureSourceType.PHOTOLIBRARY)"
+       type="button"
+       id="imageFromPhotoLibrary"
+       value="Get Photo Library Image"/>
+<br/>
+<p id="data"></p>
+
+<img style="width:100%;display: block" id="largeImage" src="" />
+
+</body>
+</html>

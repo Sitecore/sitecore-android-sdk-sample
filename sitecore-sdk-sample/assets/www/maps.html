@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+
+    function openMapsFor1AddressDefaultRoute() {
+        var maps = scmobile.google_maps.GoogleMaps();
+        maps.addresses = [{
+            country: "Россия",
+            city: "Москва",
+            street: "Красная площадь, 3",
+            zip: "93190"
+        }];
+
+        maps.show();
+    }
+
+</script>
+<h1>Google Maps plugin example</h1>
+<hr>
+<input onclick="openMapsFor1AddressDefaultRoute()"
+       type="button"
+       value="Show 1 address (drawRoute by default)">
+<br/>
+</body>
+</html>

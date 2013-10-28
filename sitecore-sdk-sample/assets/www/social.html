@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Send to social network example</h1>
+<script type="text/javascript" charset="utf-8">
+    var onSuccess = function (result) {
+        alert('Success: ' + result);
+    }
+
+    var onError = function (error) {
+        alert(error.localizedDescription);
+    }
+
+    function sendNormalText() {
+        var social = new scmobile.share.Social();
+        social.text = 'Text to send http://google.com';
+        social.send(onSuccess, onError);
+    }
+
+    function sendLink() {
+        var social = new scmobile.share.Social();
+        social.text = 'some text'
+        social.urls = ['http://google.com'];
+        social.send(onSuccess, onError);
+    }
+
+
+    var onOnePictureLoaded = function(imageUrl) {
+        var image = document.getElementById('largeImage');
+        image.src = imageUrl;
+        var social = new scmobile.share.Social();
+        social.text = 'Text to send';
+        social.imageUrls = [imageUrl];
+        social.send(onSuccess, onError);
+    }
+
+    var shareImage = function(imageFunction, SourceType) {
+        var options = {};
+        options.sourceType = SourceType;
+        scmobile.camera.getPicture(imageFunction, onError, options);
+    }
+
+</script>
+<input id="normalText" onclick="sendNormalText()" type="button" value="Send Normal Text"/> <br/>
+<input id="oneImage" onclick="shareImage(onOnePictureLoaded, scmobile.camera.PictureSourceType.SAVEDPHOTOALBUM)" type="button" value="Send One Image from Gallery"/> <br/>
+<input id="sendLink" onclick="sendLink()" type="button" value="Send Link"/> <br/>
+<img style="width:100%;display: block" id="largeImage" src="" />
+
+</body>
+</html>
