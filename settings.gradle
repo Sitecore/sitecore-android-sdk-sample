@@ -1,0 +1,3 @@
+include ':sitecore-sdk-sample'
+include ':sitecore-js-android'
+include ':sitecore-qr-reader'

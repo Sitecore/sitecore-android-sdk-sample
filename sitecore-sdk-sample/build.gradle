@@ -11,9 +11,12 @@ buildscript {
 apply plugin: 'android'
 
 dependencies {
-    compile project(':sdk:sitecore-js-android')
-    compile project(':sdk:sitecore-qr-reader')
+    compile project(':sitecore-js-android')
+    compile project(':sitecore-qr-reader')
     compile 'com.android.support:support-v4:18.0.0'
+    compile files('libs/sitecore-api-android.jar')
+    compile files('libs/volley.jar')
+    compile files('libs/gson-2.2.4.jar') 
 }
 
 android {
@@ -32,22 +35,6 @@ android {
           manifest.srcFile 'AndroidManifest.xml'
           java.srcDirs = ['src']
           res.srcDirs = ['res']
-        }
-    }
-
-    signingConfigs {
-
-        myRelease {
-            storeFile file("../../keystore/sc.keystore")
-            storePassword "sitecore"
-            keyAlias "key"
-            keyPassword "sitecore"
-        }
-    }
-
-    buildTypes {
-        release {
-            signingConfig signingConfigs.myRelease
         }
     }
 
