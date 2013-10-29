@@ -12,7 +12,6 @@ import android.widget.ListView;
 public class TestsListActivity extends ListActivity {
 
     private static final String[] PLUGINS = {
-            "QUnit tests",
             "Toast",
             "Native alert",
             "Device info",
@@ -26,7 +25,6 @@ public class TestsListActivity extends ListActivity {
     };
 
     private static final Class[] PLUGIN_TEST = new Class[]{
-            QUnitTestsActivity.class,
             ToastSampleActivity.class,
             AlertSampleActivity.class,
             DeviceSampleActivity.class,

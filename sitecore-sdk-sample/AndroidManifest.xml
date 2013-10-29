@@ -42,7 +42,6 @@
             android:name=".js.DeviceSampleActivity"
             android:configChanges="orientation|keyboardHidden" />
 
-        <activity android:name=".js.QUnitTestsActivity" />
         <activity android:name=".js.EmailSampleActivity" />
         <activity android:name=".js.AccelerometerSampleActivity" />
         <activity android:name=".js.CameraSampleActivity" />

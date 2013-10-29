@@ -90,7 +90,7 @@ public class CreateItemActivity extends Activity implements Response.Listener<It
 
     @Override
     public void onResponse(ItemsResponse response) {
-        showMessage(String.format("Successfully created %d items", response.getResultCount()));
+        showMessage(String.format("Successfully created %d item(s)", response.getResultCount()));
         finish();
     }
 }
