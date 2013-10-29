@@ -7,7 +7,7 @@ var onSuccess = function (result) {
 }
 
 var onError = function (error) {
-    alert(error.localizedDescription);
+    scmobile.toast.showMessage(error.localizedDescription)
 }
 
 var displayFirstLastName = function (contacts) {
@@ -17,27 +17,25 @@ var displayFirstLastName = function (contacts) {
     }
 }
 
-var displayFirstPhone = function (contacts) {
-    for (var i = 0; i < contacts.length; i++) {
-        scmobile.notification.alert("Contact found", contacts[i].phones[0], function () {
-        }, 'Ok');
+var displayContactWithDelete = function (contacts) {
+    if (contacts.length == 0) {
+        scmobile.toast.showMessage('cannot find a contact')
     }
-}
-
-var displayPhonesCount = function (contacts) {
-    for (var i = 0; i < contacts.length; i++) {
-        scmobile.notification.alert("Contact found", "Phones count: " + contacts[i].phones.length, function () {
-        }, 'Ok');
+    var onSuccess = function()
+    {
+        scmobile.toast.showMessage('Contact was successfully removed')
     }
-}
-
-var displaySomeFields = function (contacts) {
+    var onError = function (error)
+    {
+        scmobile.toast.showMessage('cannot find a contact')
+    }
     for (var i = 0; i < contacts.length; i++) {
-        scmobile.notification.alert("Contact found",
-                "FirstName: " + contacts[i].firstName
-                        + " Company: " + contacts[i].company
-                        + " Birthday: " + contacts[i].birthday, function () {
-                }, 'Ok');
+        var contact = contacts[i];
+        scmobile.notification.alert("Contact found", "contact name  : " + contact.firstName + " , phones : " + contact.phones, function (buttonIndex) {
+        if (buttonIndex == 0) {
+            contact.remove(onSuccess, onError);
+        }
+        }, 'Delete, Cancel');
     }
 }
 
@@ -87,23 +85,6 @@ function createContactWithAllAvailableFields() {
     findContact(predicate, displayFirstLastName);
 }
 
-function selectAll() {
-    return true; //return all
-}
-
-function remove(contacts) {
-    var ids = [];
-    for (var i = 0; i < contacts.length; i++) {
-        ids.push(contacts[i].id);
-    }
-
-    scmobile.contacts.removeMultiple(ids, onSuccess, onError);
-}
-
-function deleteAllContacts() {
-    scmobile.contacts.silentSelect(selectAll, remove, onError);
-}
-
 function showEditForm() {
     var contact = scmobile.contacts.create({
         firstName: "Username",
@@ -125,6 +106,15 @@ function showEditForm() {
     contact.save(onSuccess, onError);
 }
 
+function search(){
+    var name = document.getElementById("contact_name").value;
+    var predicate = function (contact) {
+        return (contact.firstName == name);
+    }
+    scmobile.console.log("looking for " + name);
+    findContact(predicate, displayContactWithDelete);
+}
+
 </script>
 <h1>Contacts plugin example</h1>
 <hr>
@@ -136,6 +126,12 @@ function showEditForm() {
 <input onclick="showEditForm()"
        type="button"
        value="Show New Contact Form">
+<br/>
+<hr>
+<form name="name" >
+    <input type="text" name="contact_name" id="contact_name"  />
+    <input type="button" name="find" onclick="search()" value="Find contact by name" />
+</form>
 <br/>
 </body>
 </html>
