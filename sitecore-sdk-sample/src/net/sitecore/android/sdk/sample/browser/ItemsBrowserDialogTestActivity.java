@@ -26,6 +26,7 @@ public class ItemsBrowserDialogTestActivity extends Activity {
 
             final RequestQueue requestQueue = RequestQueueProvider.getRequestQueue(ItemsBrowserDialogTestActivity.this);
             itemsBrowserFragment.setApiProperties(requestQueue, ItemsApp.from(this).getSession());
+            itemsBrowserFragment.setNetworkEventsListener(new SimpleNetworkListenerImpl(getApplicationContext()));
         }
     }
 

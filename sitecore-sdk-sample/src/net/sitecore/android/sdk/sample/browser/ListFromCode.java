@@ -30,6 +30,7 @@ public class ListFromCode extends Activity {
 
             final RequestQueue requestQueue = RequestQueueProvider.getRequestQueue(ListFromCode.this);
             itemsBrowserFragment.setApiProperties(requestQueue, ItemsApp.from(this).getSession());
+            itemsBrowserFragment.setNetworkEventsListener(new SimpleNetworkListenerImpl(getApplicationContext()));
         } else {
             LogUtils.LOGD("re start");
             itemsBrowserFragment = (ItemsBrowserFragment) getFragmentManager().findFragmentByTag("tag");

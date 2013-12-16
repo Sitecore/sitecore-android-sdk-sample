@@ -44,6 +44,7 @@ public class StyledListDialogFromCode extends Activity {
 
             final RequestQueue requestQueue = RequestQueueProvider.getRequestQueue(StyledListDialogFromCode.this);
             itemsBrowserFragment.setApiProperties(requestQueue, ItemsApp.from(this).getSession());
+            itemsBrowserFragment.setNetworkEventsListener(new SimpleNetworkListenerImpl(getApplicationContext()));
         }
     }
 

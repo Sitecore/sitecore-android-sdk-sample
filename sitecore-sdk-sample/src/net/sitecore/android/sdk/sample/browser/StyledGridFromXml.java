@@ -46,6 +46,7 @@ public class StyledGridFromXml extends Activity implements ItemsBrowserFragment.
 
         final RequestQueue requestQueue = RequestQueueProvider.getRequestQueue(StyledGridFromXml.this);
         fragment.setApiProperties(requestQueue, ItemsApp.from(this).getSession());
+        fragment.setNetworkEventsListener(new SimpleNetworkListenerImpl(getApplicationContext()));
     }
 
     @Override
