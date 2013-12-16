@@ -38,24 +38,26 @@
 
         <activity
             android:name=".browser.ListFromCode"
-            android:label="browser list" />
+            android:label="Items browser from cache" />
 
         <activity
             android:name=".browser.ItemsBrowserDialogTestActivity"
-            android:label="browser dialog" />
+            android:label="Items browser dialog" />
 
         <activity
             android:name=".browser.StyledListDialogFromCode"
             tools:ignore="NewApi"
-            android:label="browser dialog2"
+            android:label="Styled items browser"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar" />
 
-        <activity android:name="net.sitecore.android.sdk.sample.browser.CachedList" />
+        <activity
+            android:name="net.sitecore.android.sdk.sample.browser.CachedList"
+            android:label="Items cache browser" />
 
         <activity
             android:name=".browser.StyledGridFromXml"
             tools:ignore="NewApi"
-            android:label="Styled browser"
+            android:label="Styled items browser"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar" />
 
         <activity android:name=".js.TestsListActivity" />
@@ -76,13 +78,7 @@
         <activity android:name=".js.CameraSampleActivity" />
         <activity android:name=".js.SocialSampleActivity" />
         <activity android:name=".js.QrReaderSample" />
-
-        <activity android:name=".js.web.WebPagesListActivity" />
-        <activity android:name=".js.web.WebToastSampleActivity" />
-        <activity android:name=".js.web.WebAlertSampleActivity" />
-        <activity android:name=".js.web.WebTestSiteSampleActivity" />
-        <activity android:name=".js.web.WebEmailSampleActivity" />
-        <activity android:name=".js.web.WebAccelerometerSampleActivity" />
+        <activity android:name=".js.EventsSampleActivity" />
 
         <activity
             android:name="net.sitecore.android.qr.QrReaderActivity"

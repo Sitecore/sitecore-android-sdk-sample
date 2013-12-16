@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+    var onSuccess = function () {
+        alert("Event created");
+    };
+
+    var onError = function (error) {
+        alert(error.localizedDescription);
+    };
+
+    var createEventWithTitleAndDescription = function () {
+        var event = scmobile.events.create({title: 'Event with title and description', notes: 'Event notes', location: 'Event location', alarm: '3600'});
+        event.save(onSuccess, onError);
+    };
+
+</script>
+<h2>Events plugin example</h2>
+<hr>
+<input onclick="createEventWithTitleAndDescription()"
+       type="button"
+       id="create_event"
+       value="Create Event With Title And Description"/>
+<br/>
+</body>
+</html>

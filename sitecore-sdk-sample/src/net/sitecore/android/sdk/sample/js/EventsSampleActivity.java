@@ -1,4 +1,4 @@
-package net.sitecore.android.sdk.sample.js.web;
+package net.sitecore.android.sdk.sample.js;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -6,13 +6,13 @@ import android.support.v4.app.FragmentActivity;
 import net.sitecore.android.sdk.sample.R;
 import net.sitecore.android.sdk.web.ScWebViewSupportFragment;
 
-public class WebTestSiteSampleActivity extends FragmentActivity {
+public class EventsSampleActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.main_support_fragment);
         ScWebViewSupportFragment fragment = (ScWebViewSupportFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_scmobile);
-
-        fragment.getWebView().loadUrl("http://mobiledev1ua1.dk.sitecore.net:666");
+        fragment.getWebView().loadUrl("file:///android_asset/www/events.html");
     }
 }

@@ -32,6 +32,8 @@ public class ItemsBrowserDialogTestActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        itemsBrowserFragment.getDialog().setTitle("Select item");
+        if (itemsBrowserFragment != null) {
+            itemsBrowserFragment.getDialog().setTitle("Select item");
+        }
     }
 }

@@ -15,19 +15,21 @@ public class TestsListActivity extends ListActivity {
             "Toast",
             "Native alert",
             "Device info",
+            "Events",
             "Send email",
             "Send to social network",
             "Accelerometer",
             "Get image",
             "Contacts",
             "QR Reader",
-            "Google Maps",
+            "Google Maps"
     };
 
     private static final Class[] PLUGIN_TEST = new Class[]{
             ToastSampleActivity.class,
             AlertSampleActivity.class,
             DeviceSampleActivity.class,
+            EventsSampleActivity.class,
             EmailSampleActivity.class,
             SocialSampleActivity.class,
             AccelerometerSampleActivity.class,
