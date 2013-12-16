@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
     package="net.sitecore.android.sdk.sample"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="5"
     android:versionName="0.5">
 
@@ -18,9 +20,9 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
+        android:name=".itemsmanager.ItemsApp"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:name=".itemsmanager.ItemsApp">
+        android:label="@string/app_name">
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -28,6 +30,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Items browser -->
+        <activity
+            android:name=".browser.BrowserSamplesChooserActivity"
+            android:label="Items Browser Samples" />
+
+        <activity
+            android:name=".browser.ListFromCode"
+            android:label="browser list" />
+
+        <activity
+            android:name=".browser.ItemsBrowserDialogTestActivity"
+            android:label="browser dialog" />
+
+        <activity
+            android:name=".browser.StyledListDialogFromCode"
+            tools:ignore="NewApi"
+            android:label="browser dialog2"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" />
+
+        <activity android:name="net.sitecore.android.sdk.sample.browser.CachedList" />
+
+        <activity
+            android:name=".browser.StyledGridFromXml"
+            tools:ignore="NewApi"
+            android:label="Styled browser"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" />
 
         <activity android:name=".js.TestsListActivity" />
         <activity
@@ -57,10 +86,10 @@
 
         <activity
             android:name="net.sitecore.android.qr.QrReaderActivity"
-            android:screenOrientation="landscape"
             android:clearTaskOnLaunch="true"
-            android:stateNotNeeded="true"
             android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:stateNotNeeded="true"
             android:theme="@style/Theme.QrReader" />
 
         <activity android:name=".js.ContactsSampleActivity" />
@@ -69,15 +98,19 @@
         <activity
             android:name=".itemsmanager.ManagerActivity"
             android:configChanges="orientation"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity android:name=".itemsmanager.SettingsActivity" />
         <activity android:name=".itemsmanager.ItemActivity" />
         <activity android:name=".itemsmanager.CreateItemActivity" />
 
         <service android:name="net.sitecore.android.sdk.api.UploadMediaService" />
+
+        <provider
+            android:name="net.sitecore.android.sdk.api.provider.ScItemsProvider"
+            android:authorities="net.sitecore.android.sdk.api.provider"
+            android:exported="false" />
 
     </application>
 </manifest>

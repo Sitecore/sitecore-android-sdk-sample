@@ -73,7 +73,11 @@ class ScCallbackContext {
         mWebView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mWebView.loadUrl("javascript: " + message);
+                if (VersionUtils.isKitKatOrLater()) {
+                    mWebView.evaluateJavascript("javascript: " + message, null);
+                } else {
+                    mWebView.loadUrl("javascript: " + message);
+                }
             }
         }, 50);
     }

@@ -12,9 +12,14 @@ import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
+import net.sitecore.android.sdk.api.RequestQueueProvider;
 import net.sitecore.android.sdk.api.ScApiSession;
+import net.sitecore.android.sdk.api.ScApiSessionFactory;
+import net.sitecore.android.sdk.api.ScPublicKey;
 import net.sitecore.android.sdk.sample.R;
 
 public class SettingsActivity extends PreferenceActivity {
@@ -31,7 +36,7 @@ public class SettingsActivity extends PreferenceActivity {
 
         Button validateButton = new Button(this);
 
-        validateButton.setText("Save & Validate");
+        validateButton.setText("Validate & Save");
         validateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,33 +119,40 @@ public class SettingsActivity extends PreferenceActivity {
 
     private void validate() {
         boolean isAuth = mPrefs.isAuth();
-        String url = mPrefs.getUrl();
+        final String url = mPrefs.getUrl();
 
-        final Response.Listener<Boolean> onSessionValidated = new Response.Listener<Boolean>() {
-
+        final Response.Listener<Boolean> onSuccess = new Response.Listener<Boolean>() {
             @Override
-            public void onResponse(final Boolean isSuccess) {
-                Toast.makeText(SettingsActivity.this, isSuccess ? "Connection OK" : "Connection failure", Toast.LENGTH_LONG).show();
+            public void onResponse(Boolean isSucces) {
+                Toast.makeText(SettingsActivity.this, isSucces ? "Connection OK" : "Connection failure",
+                        Toast.LENGTH_LONG).show();
             }
         };
-
-        Response.Listener<ScApiSession> mOnSuccess = new Response.Listener<ScApiSession>() {
-            @Override
-            public void onResponse(ScApiSession session) {
-                session.validate(SettingsActivity.this, onSessionValidated);
-                ItemsApp.from(SettingsActivity.this).setSession(session);
-            }
-        };
-
 
         if (isAuth) {
-            String name = mPrefs.getLogin();
-            String password = mPrefs.getPassword();
+            final String login = mPrefs.getLogin();
+            final String password = mPrefs.getPassword();
 
-            ScApiSession.getSession(this, url, name, password, mOnSuccess);
+            Response.ErrorListener onError = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(SettingsActivity.this, Utils.getMessageFromError(error), Toast.LENGTH_LONG).show();
+                }
+            };
+
+            Request request = ScApiSessionFactory.buildPublicKeyRequest(url, new Response.Listener<ScPublicKey>() {
+                @Override
+                public void onResponse(ScPublicKey key) {
+                    mPrefs.savePublicKey(key);
+                    ScApiSessionFactory.newSession(url, key, login, password).
+                            validate(SettingsActivity.this, onSuccess);
+                }
+            }, onError);
+
+            RequestQueueProvider.getRequestQueue(this).add(request);
         } else {
-            ScApiSession.getAnonymousSession(url, mOnSuccess);
+            ScApiSession session = ScApiSessionFactory.newAnonymousSession(url);
+            session.validate(this, onSuccess);
         }
     }
-
 }
