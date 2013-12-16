@@ -12,11 +12,12 @@ apply plugin: 'android'
 
 repositories {
     mavenCentral()
+    maven {url 'http://painie.github.io/aar-test'}
 }
 dependencies {
-    compile project(':sitecore-api-android')
-    compile project(':sitecore-js-android')
-    compile project(':sitecore-qr-reader')
+    compile 'net.sitecore.android.sdk:sitecore-api-android:1.1'
+    compile 'net.sitecore.android.sdk:sitecore-js-android:1.1'
+    compile 'net.sitecore.android.sdk:sitecore-qr-reader:1.1'
     compile 'com.android.support:support-v4:18.0.0'
     compile 'com.google.zxing:core:2.2'
 }
