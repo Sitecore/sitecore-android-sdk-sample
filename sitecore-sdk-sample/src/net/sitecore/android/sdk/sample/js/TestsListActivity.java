@@ -22,7 +22,8 @@ public class TestsListActivity extends ListActivity {
             "Get image",
             "Contacts",
             "QR Reader",
-            "Google Maps"
+            "Google Maps",
+            "Custom website"
     };
 
     private static final Class[] PLUGIN_TEST = new Class[]{
@@ -37,6 +38,7 @@ public class TestsListActivity extends ListActivity {
             ContactsSampleActivity.class,
             QrReaderSample.class,
             MapsSampleActivity.class,
+            CustomWebsiteActivity.class,
     };
 
 

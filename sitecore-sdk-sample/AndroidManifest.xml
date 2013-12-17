@@ -79,6 +79,7 @@
         <activity android:name=".js.SocialSampleActivity" />
         <activity android:name=".js.QrReaderSample" />
         <activity android:name=".js.EventsSampleActivity" />
+        <activity android:name=".js.CustomWebsiteActivity" />
 
         <activity
             android:name="net.sitecore.android.qr.QrReaderActivity"
