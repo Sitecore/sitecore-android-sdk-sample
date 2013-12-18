@@ -17,7 +17,7 @@ The application includes the following feature examples:
  * Manipulating Items in a Sitecore instance
  * Items Browser component for browsing through content tree with customizable UI
 
-The application supports Android devices running v2.2 and later. The application can request content from Sitecore efficiently and securely via Sitecore Item Web API RESTful web service. 
+The application supports Android devices running v4.0 and later. The application can request content from Sitecore efficiently and securely via Sitecore Item Web API RESTful web service. 
 It is expected that for the Item Manipulation examples to work, the developer has a Sitecore instance setup configured with the Item Web API module installed.
 
 Documentation for the SDK, including installation and developer guides can be found on the [Sitecore Developer Network (SDN)][3]
