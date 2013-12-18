@@ -14,6 +14,7 @@ The application includes the following feature examples:
  * Email functions (creating and sending)
  * Sharing to Social Networks
  * Manipulating Items in a Sitecore instance
+ * Items Browser component for browsing through content tree with customizable UI
 
 The application supports Android devices running v2.2 and later. The application can request content from Sitecore efficiently and securely via Sitecore Item Web API RESTful web service. 
 It is expected that for the Item Manipulation examples to work, the developer has a Sitecore instance setup configured with the Item Web API module installed.
@@ -24,6 +25,7 @@ Please note that this application is for demonstration purposes only, and is not
 
 ### This repository contains:
  * Sample App source code
+ * Sample app binary in release section
 
 ## Further Information
  * [Sitecore Mobile SDK for Android][4]
