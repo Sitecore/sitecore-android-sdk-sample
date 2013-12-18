@@ -5,5 +5,6 @@
     <string name="key_url">url</string>
     <string name="key_login">login</string>
     <string name="key_password">password</string>
+    <string name="key_public_key">public_key</string>
 
 </resources>

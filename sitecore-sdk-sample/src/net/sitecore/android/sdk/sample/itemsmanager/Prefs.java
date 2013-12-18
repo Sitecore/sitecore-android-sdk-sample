@@ -3,6 +3,7 @@ package net.sitecore.android.sdk.sample.itemsmanager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import net.sitecore.android.sdk.api.ScPublicKey;
 import net.sitecore.android.sdk.sample.R;
 
 public class Prefs {
@@ -59,5 +60,13 @@ public class Prefs {
 
     public boolean isAuth() {
         return getBool(R.string.key_is_auth, false);
+    }
+
+    public String getPublicKeyValue() {
+        return getString(R.string.key_public_key, null);
+    }
+
+    public void savePublicKey(ScPublicKey key) {
+        put(R.string.key_public_key, key.getRawValue());
     }
 }

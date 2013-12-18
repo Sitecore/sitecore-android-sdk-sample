@@ -2,20 +2,17 @@ package net.sitecore.android.sdk.sample.itemsmanager;
 
 import android.app.Application;
 import android.content.Context;
-import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import net.sitecore.android.sdk.api.ScApiSession;
+import net.sitecore.android.sdk.api.ScApiSessionFactory;
+import net.sitecore.android.sdk.api.ScPublicKey;
 
-import static com.android.volley.Response.Listener;
-
-public class ItemsApp extends Application implements Listener<ScApiSession>, Response.ErrorListener {
+public class ItemsApp extends Application {
 
     private Prefs mPrefs;
-
-    private ScApiSession mSession;
 
     public static ItemsApp from(Context context) {
         return (ItemsApp) context.getApplicationContext();
@@ -25,38 +22,22 @@ public class ItemsApp extends Application implements Listener<ScApiSession>, Res
     public void onCreate() {
         super.onCreate();
         mPrefs = Prefs.from(this);
-
-        initSession();
-    }
-
-    private void initSession() {
-        boolean isAuth = mPrefs.isAuth();
-        String url = mPrefs.getUrl();
-        String login = mPrefs.getLogin();
-        String pass = mPrefs.getPassword();
-
-        if (isAuth) {
-            ScApiSession.getSession(this, url, login, pass, this, this);
-        } else {
-            ScApiSession.getAnonymousSession(url, this);
-        }
     }
 
     public ScApiSession getSession() {
-        return mSession;
-    }
-
-    public void setSession(ScApiSession session) {
-        mSession = session;
-    }
-
-    @Override
-    public void onResponse(ScApiSession session) {
-        mSession = session;
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        Toast.makeText(this, Utils.getMessageFromError(error), Toast.LENGTH_LONG).show();
+        if (mPrefs.isAuth()) {
+            String keyValue = mPrefs.getPublicKeyValue();
+            ScPublicKey key;
+            try {
+                key = new ScPublicKey(keyValue);
+            } catch (InvalidKeySpecException e) {
+                throw new RuntimeException("Cannot read public key");
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException("Cannot read public key");
+            }
+            return ScApiSessionFactory.newSession(mPrefs.getUrl(), key, mPrefs.getLogin(), mPrefs.getPassword());
+        } else {
+            return ScApiSessionFactory.newAnonymousSession(mPrefs.getUrl());
+        }
     }
 }

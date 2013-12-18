@@ -1,6 +1,5 @@
 package net.sitecore.android.sdk.sample;
 
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import net.sitecore.android.sdk.sample.browser.BrowserSamplesChooserActivity;
 import net.sitecore.android.sdk.sample.itemsmanager.ManagerActivity;
 import net.sitecore.android.sdk.sample.js.TestsListActivity;
 
@@ -16,12 +16,14 @@ public class MainActivity extends ListActivity {
 
     private static final String[] PLUGINS = {
             "Javascript sample",
-            "Web API sample"
+            "Web API sample",
+            "Items browser component"
     };
 
     private static final Class[] PLUGIN_TEST = new Class[]{
             TestsListActivity.class,
-            ManagerActivity.class
+            ManagerActivity.class,
+            BrowserSamplesChooserActivity.class
     };
 
 
