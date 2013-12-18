@@ -13,6 +13,7 @@ The application includes the following feature examples:
  * Contact functions (Address Book management)
  * Email functions (creating and sending)
  * Sharing to Social Networks
+ * Creating calendar event
  * Manipulating Items in a Sitecore instance
  * Items Browser component for browsing through content tree with customizable UI
 
