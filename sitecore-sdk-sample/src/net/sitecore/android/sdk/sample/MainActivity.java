@@ -2,11 +2,13 @@ package net.sitecore.android.sdk.sample;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import net.sitecore.android.sdk.sample.browser.BrowserSamplesChooserActivity;
 import net.sitecore.android.sdk.sample.itemsmanager.ManagerActivity;
@@ -37,6 +39,11 @@ public class MainActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
+        if (position == 2 && (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH)) {
+            Toast.makeText(this, "Items browser component is supported in Android 4.0 or later", Toast.LENGTH_LONG).
+                    show();
+            return;
+        }
         startActivity(new Intent(this, PLUGIN_TEST[position]));
     }
 }
