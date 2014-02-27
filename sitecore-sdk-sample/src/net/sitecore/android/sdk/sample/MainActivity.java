@@ -4,6 +4,8 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import net.sitecore.android.sdk.sample.browser.BrowserSamplesChooserActivity;
 import net.sitecore.android.sdk.sample.itemsmanager.ManagerActivity;
+import net.sitecore.android.sdk.sample.itemsmanager.SettingsActivity;
 import net.sitecore.android.sdk.sample.js.TestsListActivity;
 
 public class MainActivity extends ListActivity {
@@ -28,6 +31,21 @@ public class MainActivity extends ListActivity {
             BrowserSamplesChooserActivity.class
     };
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (item.getItemId() == R.id.menu_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        } else {
+            return super.onMenuItemSelected(featureId, item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
