@@ -100,7 +100,7 @@ public class ManagerActivity extends FragmentActivity implements Response.ErrorL
             }
         };
 
-        RequestBuilder builder = ItemsApp.from(this).getSession().deleteItems(success, this);
+        RequestBuilder builder = ItemsApp.from(this).getSession().deleteItemsRequest(success, this);
         builder.byItemId(item.getId());
         RequestQueueProvider.getRequestQueue(this).add(builder.build());
     }

@@ -54,8 +54,10 @@ public class QueryFragment extends Fragment {
         return rootView;
     }
 
-    public ScRequest<?> createRequest(Response.Listener<ItemsResponse> successListener, Response.ErrorListener errorListener) {
-        RequestBuilder builder = ItemsApp.from(getActivity()).getSession().getItems(successListener, errorListener);
+    public ScRequest<?> createRequest(Response.Listener<ItemsResponse> successListener,
+            Response.ErrorListener errorListener) {
+        RequestBuilder builder = ItemsApp.from(getActivity()).getSession().
+                readItemsRequest(successListener, errorListener);
 
         if (!TextUtils.isEmpty(mItemIDText.getText())) {
             builder.byItemId(mItemIDText.getText().toString());

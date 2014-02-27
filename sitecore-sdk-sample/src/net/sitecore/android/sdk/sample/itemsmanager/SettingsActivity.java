@@ -145,14 +145,14 @@ public class SettingsActivity extends PreferenceActivity {
                 public void onResponse(ScPublicKey key) {
                     mPrefs.savePublicKey(key);
                     ScApiSessionFactory.newSession(url, key, login, password).
-                            validate(SettingsActivity.this, onSuccess);
+                            checkCredentialsRequest(SettingsActivity.this, onSuccess);
                 }
             }, onError);
 
             RequestQueueProvider.getRequestQueue(this).add(request);
         } else {
             ScApiSession session = ScApiSessionFactory.newAnonymousSession(url);
-            session.validate(this, onSuccess);
+            session.checkCredentialsRequest(this, onSuccess);
         }
     }
 }

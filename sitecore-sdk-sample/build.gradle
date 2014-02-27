@@ -15,10 +15,13 @@ repositories {
     maven {url 'http://sitecore.github.io/sitecore-android-sdk/aar'}
 }
 dependencies {
-    compile 'net.sitecore.android.sdk:sitecore-api-android:1.1'
-    compile 'net.sitecore.android.sdk:sitecore-js-android:1.1'
-    compile 'net.sitecore.android.sdk:sitecore-qr-reader:1.1'
-    compile 'com.android.support:support-v4:18.0.0'
+    compile project(':sdk-public:sitecore-api-android')
+    compile project(':sdk-public:sitecore-js-android')
+    compile project(':sdk-public:sitecore-qr-reader')
+//    compile 'net.sitecore.android.sdk:sitecore-api-android:1.1'
+//    compile 'net.sitecore.android.sdk:sitecore-js-android:1.1'
+//    compile 'net.sitecore.android.sdk:sitecore-qr-reader:1.1'
+    compile 'com.android.support:support-v4:19.0.1'
     compile 'com.google.zxing:core:2.2'
 }
 

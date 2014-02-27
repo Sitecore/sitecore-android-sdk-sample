@@ -18,6 +18,6 @@
         android:name="net.sitecore.android.sdk.sample.browser.StyledGridFromXml$StyledFragment"
         app:rootFolder="/sitecore/media library"
         app:columnCount="3"
-        app:style="GRID" />
+        app:loadContentWithoutConnection="true" />
 
 </LinearLayout>

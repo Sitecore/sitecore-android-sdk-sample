@@ -68,7 +68,7 @@ public class CreateItemActivity extends Activity implements Response.Listener<It
             return;
         }
 
-        RequestBuilder builder = ItemsApp.from(this).getSession().createItem(itemName,
+        RequestBuilder builder = ItemsApp.from(this).getSession().createItemRequest(itemName,
                 DEFAULT_TEMPLATE_PATH, this, this);
 
         if (!TextUtils.isEmpty(mItemDatabaseText.getText())) {

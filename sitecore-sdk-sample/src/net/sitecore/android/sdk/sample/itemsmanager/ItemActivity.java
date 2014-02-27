@@ -20,23 +20,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.ImageLoader;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import com.android.volley.toolbox.ImageLoader;
+
 import net.sitecore.android.sdk.api.RequestQueueProvider;
 import net.sitecore.android.sdk.api.ScApiSession;
+import net.sitecore.android.sdk.api.model.CheckBoxField;
+import net.sitecore.android.sdk.api.model.ImageField;
+import net.sitecore.android.sdk.api.model.RichTextField;
 import net.sitecore.android.sdk.api.model.ScBaselistField;
-import net.sitecore.android.sdk.api.model.ScCheckBoxField;
 import net.sitecore.android.sdk.api.model.ScDateField;
 import net.sitecore.android.sdk.api.model.ScField;
-import net.sitecore.android.sdk.api.model.ScImageField;
 import net.sitecore.android.sdk.api.model.ScItem;
-import net.sitecore.android.sdk.api.model.ScRichtextField;
 import net.sitecore.android.sdk.sample.R;
 
 public class ItemActivity extends ListActivity {
@@ -148,9 +148,9 @@ public class ItemActivity extends ListActivity {
                 ArrayList<String> itemsIds = ((ScBaselistField) field).getItemsIds();
                 spinner.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, itemsIds));
                 return spinner;
-            } else if (field instanceof ScCheckBoxField) {
+            } else if (field instanceof CheckBoxField) {
                 CheckBox checkBox = new CheckBox(getContext());
-                checkBox.setChecked(((ScCheckBoxField) field).isChecked());
+                checkBox.setChecked(((CheckBoxField) field).isChecked());
                 return checkBox;
             } else if (field instanceof ScDateField) {
                 EditText text = new EditText(getContext());
@@ -158,16 +158,16 @@ public class ItemActivity extends ListActivity {
                 String date = DATE_FORMAT.format(new Date(((ScDateField) field).getDate()));
                 text.setText(date);
                 return text;
-            } else if (field instanceof ScImageField) {
+            } else if (field instanceof ImageField) {
                 ImageView imageView = new ImageView(getContext());
-                String imageUrl = mSession.getBaseUrl() + ((ScImageField) field).getImageSrcUrl();
+                String imageUrl = mSession.getBaseUrl() + ((ImageField) field).getImageSrcUrl();
                 mImageLoader.get(imageUrl, ImageLoader.getImageListener(imageView, 0, 0));
                 return imageView;
-            } else if (field instanceof ScRichtextField) {
+            } else if (field instanceof RichTextField) {
                 Button showButton = new Button(getContext());
                 showButton.setText("show in webview");
 
-                final String text = ((ScRichtextField) field).getHtmlText(mSession.getBaseUrl());
+                final String text = ((RichTextField) field).getHtmlText(mSession.getBaseUrl());
                 if (TextUtils.isEmpty(text)) {
                     showButton.setEnabled(false);
                 } else {

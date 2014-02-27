@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import net.sitecore.android.sdk.widget.ItemsBrowserFragment;
+import net.sitecore.android.sdk.widget.ItemsListBrowserFragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class CachedList extends Activity {
@@ -15,7 +16,7 @@ public class CachedList extends Activity {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            final ItemsBrowserFragment fragment = new ItemsBrowserFragment();
+            final ItemsBrowserFragment fragment = new ItemsListBrowserFragment();
             getFragmentManager().beginTransaction()
                     .replace(android.R.id.content, fragment, "tag")
                     .commit();

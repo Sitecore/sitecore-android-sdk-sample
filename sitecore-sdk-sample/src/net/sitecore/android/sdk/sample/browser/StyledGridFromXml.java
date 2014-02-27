@@ -3,6 +3,7 @@ package net.sitecore.android.sdk.sample.browser;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,16 +14,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 
-import net.sitecore.android.sdk.api.LogUtils;
 import net.sitecore.android.sdk.api.RequestQueueProvider;
+import net.sitecore.android.sdk.api.ScApiSession;
+import net.sitecore.android.sdk.api.ScApiSessionFactory;
 import net.sitecore.android.sdk.api.model.ItemsResponse;
 import net.sitecore.android.sdk.api.model.ScItem;
 import net.sitecore.android.sdk.sample.R;
-import net.sitecore.android.sdk.sample.itemsmanager.ItemsApp;
+import net.sitecore.android.sdk.sample.itemsmanager.Prefs;
 import net.sitecore.android.sdk.widget.ItemViewBinder;
 import net.sitecore.android.sdk.widget.ItemsBrowserFragment;
+import net.sitecore.android.sdk.widget.ItemsGridBrowserFragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class StyledGridFromXml extends Activity implements ItemsBrowserFragment.ContentTreePositionListener,
@@ -36,7 +40,6 @@ public class StyledGridFromXml extends Activity implements ItemsBrowserFragment.
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         setContentView(R.layout.browser_styled);
-        LogUtils.setLogEnabled(true);
 
         mTitle = (TextView) findViewById(R.id.text_title);
 
@@ -44,9 +47,23 @@ public class StyledGridFromXml extends Activity implements ItemsBrowserFragment.
         fragment.setContentTreePositionListener(this);
         fragment.setNetworkEventsListener(this);
 
-        final RequestQueue requestQueue = RequestQueueProvider.getRequestQueue(StyledGridFromXml.this);
-        fragment.setApiProperties(requestQueue, ItemsApp.from(this).getSession());
-        fragment.setNetworkEventsListener(new SimpleNetworkListenerImpl(getApplicationContext()));
+        Listener<ScApiSession> onSuccess = new Listener<ScApiSession>() {
+            @Override
+            public void onResponse(ScApiSession scApiSession) {
+                final RequestQueue requestQueue = RequestQueueProvider.
+                        getRequestQueue(StyledGridFromXml.this);
+                fragment.setApiProperties(requestQueue, scApiSession);
+            }
+        };
+
+        Prefs prefs = Prefs.from(this);
+        if (prefs.isAuth()) {
+            ScApiSessionFactory.getSession(
+                    RequestQueueProvider.getRequestQueue(this),
+                    prefs.getUrl(), prefs.getLogin(), prefs.getPassword(), onSuccess);
+        } else {
+            ScApiSessionFactory.getAnonymousSession(prefs.getUrl(), onSuccess);
+        }
     }
 
     @Override
@@ -79,7 +96,7 @@ public class StyledGridFromXml extends Activity implements ItemsBrowserFragment.
         setProgressBarIndeterminateVisibility(false);
     }
 
-    public static class StyledFragment extends ItemsBrowserFragment {
+    public static class StyledFragment extends ItemsGridBrowserFragment {
 
         @Override
         public void onScItemClick(ScItem item) {
@@ -119,9 +136,7 @@ public class StyledGridFromXml extends Activity implements ItemsBrowserFragment.
                 holder.text1.setText(title);
                 holder.text2.setText(item.getTemplate());
 
-                int textColor = item.hasChildren()
-                        ? getResources().getColor(android.R.color.holo_green_dark)
-                        : getResources().getColor(android.R.color.holo_red_dark);
+                int textColor = item.hasChildren() ? Color.GREEN : Color.RED;
                 holder.text2.setTextColor(textColor);
             }
 
