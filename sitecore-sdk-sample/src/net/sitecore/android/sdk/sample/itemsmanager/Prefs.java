@@ -46,6 +46,10 @@ public class Prefs {
         mPreferences.edit().putBoolean(key, value).commit();
     }
 
+    public boolean isFirstLaunch() {
+        return getBool(R.string.key_first_launch, true);
+    }
+
     public String getLogin() {
         return getString(R.string.key_login);
     }

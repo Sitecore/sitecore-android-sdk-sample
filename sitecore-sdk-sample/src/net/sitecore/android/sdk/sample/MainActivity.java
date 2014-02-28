@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import net.sitecore.android.sdk.sample.browser.BrowserSamplesChooserActivity;
 import net.sitecore.android.sdk.sample.itemsmanager.ManagerActivity;
+import net.sitecore.android.sdk.sample.itemsmanager.Prefs;
 import net.sitecore.android.sdk.sample.itemsmanager.SettingsActivity;
 import net.sitecore.android.sdk.sample.js.TestsListActivity;
 
@@ -50,6 +51,14 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Prefs prefs = Prefs.from(this);
+        if (prefs.isFirstLaunch()) {
+            prefs.put(R.string.key_first_launch, false);
+
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        }
 
         final ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, PLUGINS);
         setListAdapter(adapter);
