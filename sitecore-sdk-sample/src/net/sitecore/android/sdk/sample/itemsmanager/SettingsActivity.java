@@ -123,8 +123,8 @@ public class SettingsActivity extends PreferenceActivity {
 
         final Response.Listener<Boolean> onSuccess = new Response.Listener<Boolean>() {
             @Override
-            public void onResponse(Boolean isSucces) {
-                Toast.makeText(SettingsActivity.this, isSucces ? "Connection OK" : "Connection failure",
+            public void onResponse(Boolean isSuccess) {
+                Toast.makeText(SettingsActivity.this, isSuccess ? "Connection OK" : "Connection failure",
                         Toast.LENGTH_LONG).show();
             }
         };
@@ -144,15 +144,16 @@ public class SettingsActivity extends PreferenceActivity {
                 @Override
                 public void onResponse(ScPublicKey key) {
                     mPrefs.savePublicKey(key);
-                    ScApiSessionFactory.newSession(url, key, login, password).
-                            checkCredentialsRequest(SettingsActivity.this, onSuccess);
+                    RequestQueueProvider.getRequestQueue(SettingsActivity.this).
+                            add(ScApiSessionFactory.newSession(url, key, login, password).
+                            checkCredentialsRequest(SettingsActivity.this, onSuccess));
                 }
             }, onError);
 
             RequestQueueProvider.getRequestQueue(this).add(request);
         } else {
             ScApiSession session = ScApiSessionFactory.newAnonymousSession(url);
-            session.checkCredentialsRequest(this, onSuccess);
+            RequestQueueProvider.getRequestQueue(this).add(session.checkCredentialsRequest(this, onSuccess));
         }
     }
 }
