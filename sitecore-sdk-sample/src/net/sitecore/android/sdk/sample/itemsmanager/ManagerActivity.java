@@ -1,13 +1,18 @@
 package net.sitecore.android.sdk.sample.itemsmanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
+import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -15,30 +20,43 @@ import com.android.volley.VolleyError;
 import net.sitecore.android.sdk.api.RequestBuilder;
 import net.sitecore.android.sdk.api.RequestQueueProvider;
 import net.sitecore.android.sdk.api.ScRequest;
-import net.sitecore.android.sdk.api.model.DeleteItemsResponse;
 import net.sitecore.android.sdk.api.model.ItemsResponse;
-import net.sitecore.android.sdk.api.model.ScItem;
+import net.sitecore.android.sdk.api.model.RequestScope;
 import net.sitecore.android.sdk.sample.R;
 
-public class ManagerActivity extends FragmentActivity implements Response.ErrorListener, ItemsListFragment.OnDeleteItemListener {
+public class ManagerActivity extends Activity implements Response.ErrorListener {
+    private EditText mItemPathText;
+    private EditText mItemIDText;
+    private EditText mItemVersionText;
+    private EditText mDatabase;
+    private EditText mLanguage;
+    private EditText mQuery;
+    private EditText mPage;
+    private EditText mPageSize;
 
-    private ItemsListFragment mItemsFragment;
-    private QueryFragment mQueryFragment;
-    private ViewPager mPager;
+    private CheckBox mSelf;
+    private CheckBox mParent;
+    private CheckBox mChildren;
 
     private Response.Listener<ItemsResponse> mItemsResponseListener = new Response.Listener<ItemsResponse>() {
         @Override
         public void onResponse(ItemsResponse response) {
-            showMessage(String.format("%d of %d items loaded.", response.getResultCount(), response.getTotalCount()));
-            mItemsFragment.setItems(response.getItems());
-            mPager.setCurrentItem(1);
+            String message = String.format("%d of %d items loaded.", response.getResultCount(),
+                    response.getTotalCount());
+
+            Toast.makeText(ManagerActivity.this, message, Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(ManagerActivity.this, ItemsListActivity.class);
+            intent.putParcelableArrayListExtra(ItemsListActivity.DATA_KEY,
+                    (ArrayList<? extends Parcelable>) response.getItems());
+            startActivity(intent);
         }
     };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manager);
+        setContentView(R.layout.manager_activity_main);
 
         findViewById(R.id.button_send).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,13 +64,25 @@ public class ManagerActivity extends FragmentActivity implements Response.ErrorL
                 onSendRequest();
             }
         });
+    }
 
-        mPager = (ViewPager) findViewById(R.id.viewpager);
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        mItemsFragment = new ItemsListFragment();
-        mQueryFragment = new QueryFragment();
-        HomePagerAdapter adapter = new HomePagerAdapter(getSupportFragmentManager(), mQueryFragment, mItemsFragment);
-        mPager.setAdapter(adapter);
+        mItemPathText = (EditText) findViewById(R.id.item_path);
+        mItemIDText = (EditText) findViewById(R.id.item_id);
+        mItemVersionText = (EditText) findViewById(R.id.item_version);
+        mDatabase = (EditText) findViewById(R.id.item_database);
+        mLanguage = (EditText) findViewById(R.id.item_language);
+        mQuery = (EditText) findViewById(R.id.query);
+
+        mSelf = (CheckBox) findViewById(R.id.check_scope_self);
+        mParent = (CheckBox) findViewById(R.id.check_scope_parent);
+        mChildren = (CheckBox) findViewById(R.id.check_scope_children);
+
+        mPage = (EditText) findViewById(R.id.page);
+        mPageSize = (EditText) findViewById(R.id.page_size);
     }
 
     @Override
@@ -72,7 +102,7 @@ public class ManagerActivity extends FragmentActivity implements Response.ErrorL
     }
 
     private void onSendRequest() {
-        ScRequest request = mQueryFragment.createRequest(mItemsResponseListener, this);
+        ScRequest request = createRequest(mItemsResponseListener, this);
         if (request == null) return;
 
         RequestQueueProvider.getRequestQueue(this).add(request);
@@ -80,29 +110,69 @@ public class ManagerActivity extends FragmentActivity implements Response.ErrorL
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        showMessage(Utils.getMessageFromError(error));
+        Toast.makeText(ManagerActivity.this, Utils.getMessageFromError(error), Toast.LENGTH_SHORT).show();
     }
 
-    private void showMessage(String message) {
-        Toast.makeText(ManagerActivity.this, message, Toast.LENGTH_SHORT).show();
-    }
+    public ScRequest<?> createRequest(Response.Listener<ItemsResponse> successListener,
+            Response.ErrorListener errorListener) {
+        RequestBuilder builder = ItemsApp.from(this).getSession().
+                readItemsRequest(successListener, errorListener);
 
-    @Override
-    public void onDeleteItem(final ScItem item) {
-        Response.Listener<DeleteItemsResponse> success = new Response.Listener<DeleteItemsResponse>() {
+        if (!TextUtils.isEmpty(mItemIDText.getText())) {
+            builder.byItemId(mItemIDText.getText().toString());
+        }
 
-            @Override
-            public void onResponse(DeleteItemsResponse deleteItemsResponse) {
-                showMessage(deleteItemsResponse.getDeletedCount() + " item(s) deleted");
-                mItemsFragment.deleteItemFromList(item);
-                mPager.setCurrentItem(0);
+        if (!TextUtils.isEmpty(mItemVersionText.getText())) {
+            int version = Integer.parseInt(mItemVersionText.getText().toString());
+            builder.itemVersion(version);
+        }
 
+        if (!TextUtils.isEmpty(mItemPathText.getText())) {
+            String path = mItemPathText.getText().toString();
+            if (!path.startsWith("/")) {
+                Toast.makeText(this, "Path should start with '/'", Toast.LENGTH_LONG).show();
+                return null;
             }
-        };
+            builder.byItemPath(path);
+        }
 
-        RequestBuilder builder = ItemsApp.from(this).getSession().deleteItemsRequest(success, this);
-        builder.byItemId(item.getId());
-        RequestQueueProvider.getRequestQueue(this).add(builder.build());
+        if (!TextUtils.isEmpty(mDatabase.getText())) {
+            builder.database(mDatabase.getText().toString());
+        }
+
+        if (!TextUtils.isEmpty(mLanguage.getText())) {
+            builder.setLanguage(mLanguage.getText().toString());
+        }
+
+        if (!TextUtils.isEmpty(mQuery.getText())) {
+            builder.bySitecoreQuery(mQuery.getText().toString());
+        }
+
+        if (mSelf.isChecked()) {
+            builder.withScope(RequestScope.SELF);
+        }
+        if (mParent.isChecked()) {
+            builder.withScope(RequestScope.PARENT);
+        }
+        if (mChildren.isChecked()) {
+            builder.withScope(RequestScope.CHILDREN);
+        }
+
+        boolean isPageSet = !TextUtils.isEmpty(mPage.getText());
+        boolean isPageSizeSet = !TextUtils.isEmpty(mPageSize.getText());
+
+        if (isPageSet && isPageSizeSet) {
+            int page = Integer.parseInt(mPage.getText().toString());
+            int pageSize = Integer.parseInt(mPageSize.getText().toString());
+            builder.setPage(page, pageSize);
+        } else {
+            if (isPageSet || isPageSizeSet) {
+                Toast.makeText(this, "You have to specify both page and page size", Toast.LENGTH_LONG).show();
+                return null;
+            }
+        }
+
+        return builder.build();
     }
 
 }

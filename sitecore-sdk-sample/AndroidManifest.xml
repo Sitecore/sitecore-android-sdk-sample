@@ -31,6 +31,10 @@
             android:label="Items Browser Samples" />
 
         <activity
+            android:name=".itemsmanager.ItemsListActivity"
+            android:label="Items" />
+
+        <activity
             android:name=".browser.ListFromCode"
             android:label="Items browser from cache" />
 

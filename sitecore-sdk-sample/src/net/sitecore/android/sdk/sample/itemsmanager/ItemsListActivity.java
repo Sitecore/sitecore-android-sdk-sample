@@ -1,12 +1,11 @@
 package net.sitecore.android.sdk.sample.itemsmanager;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +13,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.volley.Response;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.VolleyError;
+
+import net.sitecore.android.sdk.api.RequestBuilder;
+import net.sitecore.android.sdk.api.RequestQueueProvider;
+import net.sitecore.android.sdk.api.model.DeleteItemsResponse;
 import net.sitecore.android.sdk.api.model.ScItem;
 
-public class ItemsListFragment extends ListFragment implements AdapterView.OnItemLongClickListener {
+public class ItemsListActivity extends ListActivity implements AdapterView.OnItemLongClickListener {
+    public static final String DATA_KEY = "items_data";
 
-    interface OnDeleteItemListener {
-        public void onDeleteItem(ScItem item);
-    }
-
-    private OnDeleteItemListener mDeleteItemListener;
     private ItemsListAdapter mAdapter;
 
     private String[] mMenuTexts = new String[]{
@@ -35,28 +38,23 @@ public class ItemsListFragment extends ListFragment implements AdapterView.OnIte
     };
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mDeleteItemListener = (OnDeleteItemListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnDeleteItemListener");
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ArrayList<ScItem> items = getIntent().getParcelableArrayListExtra(DATA_KEY);
+        if (items == null) {
+            items = new ArrayList<ScItem>();
         }
-    }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setEmptyText("No items");
-
-        mAdapter = new ItemsListAdapter(getActivity(), new ArrayList<ScItem>());
+        mAdapter = new ItemsListAdapter(this, items);
         setListAdapter(mAdapter);
+
         getListView().setOnItemLongClickListener(this);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(getActivity(), ItemActivity.class);
+        Intent intent = new Intent(this, ItemActivity.class);
         intent.putExtra(ItemActivity.DATA_KEY, mAdapter.getItem(position));
         startActivity(intent);
     }
@@ -67,9 +65,10 @@ public class ItemsListFragment extends ListFragment implements AdapterView.OnIte
         return false;
     }
 
+
     private void showActionsDialog(int position) {
         final ScItem item = mAdapter.getItem(position);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setItems(mMenuTexts, new DialogInterface.OnClickListener() {
             @Override
@@ -77,7 +76,7 @@ public class ItemsListFragment extends ListFragment implements AdapterView.OnIte
                 if (which == 0) {
                     showDeleteDialog(item);
                 } else {
-                    Intent intent = new Intent(getActivity(), CreateItemActivity.class);
+                    Intent intent = new Intent(ItemsListActivity.this, CreateItemActivity.class);
                     intent.putExtra(CreateItemActivity.PARENT_ID_KEY, item.getId());
                     startActivity(intent);
                 }
@@ -86,26 +85,14 @@ public class ItemsListFragment extends ListFragment implements AdapterView.OnIte
         builder.create().show();
     }
 
-    public void setItems(List<ScItem> items) {
-        mAdapter.clear();
-        for (ScItem item : items) {
-            mAdapter.add(item);
-        }
-    }
-
-    public void deleteItemFromList(ScItem item) {
-        mAdapter.remove(item);
-        mAdapter.notifyDataSetChanged();
-    }
-
     private void showDeleteDialog(final ScItem item) {
-        new AlertDialog.Builder(getActivity())
+        new AlertDialog.Builder(this)
                 .setTitle("Delete item")
                 .setMessage(String.format("Are use sure you want to delete %s item?", item.getDisplayName()))
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        mDeleteItemListener.onDeleteItem(item);
+                        deleteItem(item);
                         dialog.dismiss();
                     }
                 })
@@ -140,4 +127,30 @@ public class ItemsListFragment extends ListFragment implements AdapterView.OnIte
         }
     }
 
+    public void deleteItem(ScItem item) {
+        Response.Listener<DeleteItemsResponse> success = new Response.Listener<DeleteItemsResponse>() {
+
+            @Override
+            public void onResponse(DeleteItemsResponse deleteItemsResponse) {
+                Toast.makeText(ItemsListActivity.this,
+                        deleteItemsResponse.getDeletedCount() + " item(s) deleted", Toast.LENGTH_SHORT)
+                        .show();
+                finish();
+            }
+        };
+
+        ErrorListener onError = new ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ItemsListActivity.this,
+                        Utils.getMessageFromError(error), Toast.LENGTH_SHORT)
+                        .show();
+            }
+        };
+
+        RequestBuilder builder = ItemsApp.from(this).getSession().deleteItemsRequest(success, onError);
+        builder.byItemId(item.getId());
+        RequestQueueProvider.getRequestQueue(this).add(builder.build());
+    }
 }
