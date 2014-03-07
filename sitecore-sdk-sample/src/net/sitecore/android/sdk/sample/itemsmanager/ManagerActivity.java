@@ -18,8 +18,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import net.sitecore.android.sdk.api.RequestBuilder;
-import net.sitecore.android.sdk.api.RequestQueueProvider;
 import net.sitecore.android.sdk.api.ScRequest;
+import net.sitecore.android.sdk.api.ScRequestQueue;
 import net.sitecore.android.sdk.api.model.ItemsResponse;
 import net.sitecore.android.sdk.api.model.RequestScope;
 import net.sitecore.android.sdk.sample.R;
@@ -105,7 +105,7 @@ public class ManagerActivity extends Activity implements Response.ErrorListener 
         ScRequest request = createRequest(mItemsResponseListener, this);
         if (request == null) return;
 
-        RequestQueueProvider.getRequestQueue(this).add(request);
+        new ScRequestQueue(getContentResolver()).add(request);
     }
 
     @Override

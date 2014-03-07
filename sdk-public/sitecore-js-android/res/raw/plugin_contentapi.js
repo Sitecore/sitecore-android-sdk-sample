@@ -1,1 +1,0 @@
-scmobile.contentapi = {    createMediaItem: function (createItemInfo, onSuccess, onError) {        var plugin = new scmobile.utils.ScPlugin('contentapi');        createItemInfo.instanceURL = document.URL;        plugin.exec("createMediaItem", createItemInfo, onSuccess, onError);    }}

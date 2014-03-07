@@ -5,8 +5,8 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 
-import net.sitecore.android.sdk.widget.ItemsBrowserFragment;
-import net.sitecore.android.sdk.widget.ItemsListBrowserFragment;
+import net.sitecore.android.sdk.ui.ItemsBrowserFragment;
+import net.sitecore.android.sdk.ui.ItemsListBrowserFragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class CachedList extends Activity {

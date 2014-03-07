@@ -23,7 +23,7 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
 
 import net.sitecore.android.sdk.api.RequestBuilder;
-import net.sitecore.android.sdk.api.RequestQueueProvider;
+import net.sitecore.android.sdk.api.ScRequestQueue;
 import net.sitecore.android.sdk.api.model.DeleteItemsResponse;
 import net.sitecore.android.sdk.api.model.ScItem;
 
@@ -45,7 +45,6 @@ public class ItemsListActivity extends ListActivity implements AdapterView.OnIte
         if (items == null) {
             items = new ArrayList<ScItem>();
         }
-
         mAdapter = new ItemsListAdapter(this, items);
         setListAdapter(mAdapter);
 
@@ -151,6 +150,6 @@ public class ItemsListActivity extends ListActivity implements AdapterView.OnIte
 
         RequestBuilder builder = ItemsApp.from(this).getSession().deleteItemsRequest(success, onError);
         builder.byItemId(item.getId());
-        RequestQueueProvider.getRequestQueue(this).add(builder.build());
+        new ScRequestQueue(getContentResolver()).add(builder.build());
     }
 }

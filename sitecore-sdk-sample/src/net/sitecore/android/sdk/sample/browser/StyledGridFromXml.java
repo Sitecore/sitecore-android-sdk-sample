@@ -13,20 +13,19 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 
-import net.sitecore.android.sdk.api.RequestQueueProvider;
 import net.sitecore.android.sdk.api.ScApiSession;
 import net.sitecore.android.sdk.api.ScApiSessionFactory;
+import net.sitecore.android.sdk.api.ScRequestQueue;
 import net.sitecore.android.sdk.api.model.ItemsResponse;
 import net.sitecore.android.sdk.api.model.ScItem;
 import net.sitecore.android.sdk.sample.R;
 import net.sitecore.android.sdk.sample.itemsmanager.Prefs;
-import net.sitecore.android.sdk.widget.ItemViewBinder;
-import net.sitecore.android.sdk.widget.ItemsBrowserFragment;
-import net.sitecore.android.sdk.widget.ItemsGridBrowserFragment;
+import net.sitecore.android.sdk.ui.ItemViewBinder;
+import net.sitecore.android.sdk.ui.ItemsBrowserFragment;
+import net.sitecore.android.sdk.ui.ItemsGridBrowserFragment;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class StyledGridFromXml extends Activity implements ItemsBrowserFragment.ContentTreePositionListener,
@@ -50,16 +49,14 @@ public class StyledGridFromXml extends Activity implements ItemsBrowserFragment.
         Listener<ScApiSession> onSuccess = new Listener<ScApiSession>() {
             @Override
             public void onResponse(ScApiSession scApiSession) {
-                final RequestQueue requestQueue = RequestQueueProvider.
-                        getRequestQueue(StyledGridFromXml.this);
-                fragment.setApiProperties(requestQueue, scApiSession);
+                fragment.loadContent(scApiSession);
             }
         };
 
         Prefs prefs = Prefs.from(this);
         if (prefs.isAuth()) {
             ScApiSessionFactory.getSession(
-                    RequestQueueProvider.getRequestQueue(this),
+                    new ScRequestQueue(getContentResolver()),
                     prefs.getUrl(), prefs.getLogin(), prefs.getPassword(), onSuccess);
         } else {
             ScApiSessionFactory.getAnonymousSession(prefs.getUrl(), onSuccess);

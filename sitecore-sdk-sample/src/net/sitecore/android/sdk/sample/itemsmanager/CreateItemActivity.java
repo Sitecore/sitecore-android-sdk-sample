@@ -12,7 +12,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import net.sitecore.android.sdk.api.RequestBuilder;
-import net.sitecore.android.sdk.api.RequestQueueProvider;
+import net.sitecore.android.sdk.api.ScRequestQueue;
 import net.sitecore.android.sdk.api.model.ItemsResponse;
 import net.sitecore.android.sdk.sample.R;
 
@@ -76,7 +76,7 @@ public class CreateItemActivity extends Activity implements Response.Listener<It
         }
         builder.byItemId(mParentItemId);
 
-        RequestQueueProvider.getRequestQueue(this).add(builder.build());
+        new ScRequestQueue(getContentResolver()).add(builder.build());
     }
 
     public void showMessage(String message) {

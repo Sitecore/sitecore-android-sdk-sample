@@ -16,10 +16,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import net.sitecore.android.sdk.api.RequestQueueProvider;
 import net.sitecore.android.sdk.api.ScApiSession;
 import net.sitecore.android.sdk.api.ScApiSessionFactory;
 import net.sitecore.android.sdk.api.ScPublicKey;
+import net.sitecore.android.sdk.api.ScRequestQueue;
 import net.sitecore.android.sdk.sample.R;
 
 public class SettingsActivity extends PreferenceActivity {
@@ -28,6 +28,8 @@ public class SettingsActivity extends PreferenceActivity {
     private EditTextPreference mLoginPref;
     private EditTextPreference mPassPref;
     private CheckBoxPreference mAuthPref;
+
+    private ScRequestQueue mScRequestQueue;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class SettingsActivity extends PreferenceActivity {
         });
 
         getListView().addFooterView(validateButton);
+
+        mScRequestQueue = new ScRequestQueue(getContentResolver());
 
         mPrefs = Prefs.from(this);
         mUrlPref = (EditTextPreference) findPreference(getString(R.string.key_url));
@@ -144,16 +148,15 @@ public class SettingsActivity extends PreferenceActivity {
                 @Override
                 public void onResponse(ScPublicKey key) {
                     mPrefs.savePublicKey(key);
-                    RequestQueueProvider.getRequestQueue(SettingsActivity.this).
-                            add(ScApiSessionFactory.newSession(url, key, login, password).
+                    mScRequestQueue.add(ScApiSessionFactory.newSession(url, key, login, password).
                             checkCredentialsRequest(SettingsActivity.this, onSuccess));
                 }
             }, onError);
 
-            RequestQueueProvider.getRequestQueue(this).add(request);
+            new ScRequestQueue(getContentResolver()).add(request);
         } else {
             ScApiSession session = ScApiSessionFactory.newAnonymousSession(url);
-            RequestQueueProvider.getRequestQueue(this).add(session.checkCredentialsRequest(this, onSuccess));
+            mScRequestQueue.add(session.checkCredentialsRequest(this, onSuccess));
         }
     }
 }

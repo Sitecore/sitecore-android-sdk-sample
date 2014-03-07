@@ -28,8 +28,8 @@ import java.util.TimeZone;
 
 import com.android.volley.toolbox.ImageLoader;
 
-import net.sitecore.android.sdk.api.RequestQueueProvider;
 import net.sitecore.android.sdk.api.ScApiSession;
+import net.sitecore.android.sdk.api.ScRequestQueue;
 import net.sitecore.android.sdk.api.model.CheckBoxField;
 import net.sitecore.android.sdk.api.model.ImageField;
 import net.sitecore.android.sdk.api.model.RichTextField;
@@ -64,7 +64,7 @@ public class ItemActivity extends ListActivity {
             finish();
         }
 
-        mImageLoader = new ImageLoader(RequestQueueProvider.getRequestQueue(this), new BitmapLruCache());
+        mImageLoader = new ImageLoader(new ScRequestQueue(getContentResolver()), new BitmapLruCache());
         initViews();
     }
 
