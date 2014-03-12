@@ -35,7 +35,6 @@ public class StyledListDialogFromCode extends Activity {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(StyledListDialogFromCode.this, "Selected!", Toast.LENGTH_SHORT).show();
-                            //mItemsListBrowserFragment.dismiss();
                         }
                     });
                     return v;
