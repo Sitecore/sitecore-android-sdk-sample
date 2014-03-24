@@ -18,12 +18,12 @@ repositories {
 }
 
 dependencies {
+    compile 'net.sitecore.android.sdk:sitecore-mobile-sdk:2.0@aar'
+    compile 'net.sitecore.android.sdk:sitecore-mobile-javascript:2.0@aar'
+    compile 'net.sitecore.android.sdk:sitecore-mobile-ui:2.0@aar'
+    compile 'net.sitecore.android.sdk:sitecore-qr-reader:2.0@aar'
     compile 'com.google.zxing:core:2.2'
     compile 'com.android.support:support-v4:19.0.1'
-    compile 'net.sitecore.android.sdk:sitecore-api-android:2.0@aar'
-    compile 'net.sitecore.android.sdk:sitecore-js-android:2.0@aar'
-    compile 'net.sitecore.android.sdk:sitecore-qr-reader:2.0@aar'
-    compile 'net.sitecore.android.sdk:sitecore-ui-android:2.0@aar'
 }
 android {
     compileSdkVersion 19
